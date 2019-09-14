@@ -26,4 +26,6 @@ func TestLoadFromFile(t *testing.T){
 
 	ltest.Info("abc",zap.Int("int",11))
 
+	
+
 }

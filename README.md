@@ -32,6 +32,8 @@ servername="test"
 	}
 	ltest,err := l.GetLogByKey("test")
 	ltest.Info("a test")
+
+	ltest.Info("abc",zap.Int("int",11))
 ```
 
 
