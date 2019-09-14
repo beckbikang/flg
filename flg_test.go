@@ -22,6 +22,8 @@ func TestLoadFromFile(t *testing.T){
 		panic("get file faild")
 	}
 	ltest,err := l.GetLogByKey("test")
-	ltest.Info("aaaaa")
+	ltest.Info("a test")
+
+	ltest.Info("abc",zap.Int("int",11))
 
 }
