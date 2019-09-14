@@ -18,14 +18,14 @@ func TestLoadFromFile(t *testing.T){
 
 	l := &Logger{}
 	err := l.LoadFromFile("test.toml")
-	if err != nil{
+	if err != nil {
 		panic("get file faild")
 	}
-	ltest,err := l.GetLogByKey("test")
-	ltest.Info("a test")
+	lg,err := l.GetLogByKey("test")
+	lg.Info("a test")
 
-	ltest.Info("abc",zap.Int("int",11))
+	lg.Info("abc",zap.Int("int",11))
 
-	
+
 
 }
