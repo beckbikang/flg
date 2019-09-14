@@ -1,0 +1,17 @@
+title="test flg"
+
+[jackcfg]
+filename="test.log"
+maxsize=500
+maxage=7
+maxbackups=1000
+localtime=true
+compress=false
+
+
+[zapcfgs]
+[zapcfgs.1]
+level="info"
+isdev=true
+logmod=3
+servername="test"
