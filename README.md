@@ -3,7 +3,7 @@ a simple log lib build use zap and lumberjack
 
 对zlog和lumberjack进行封装。希望能够结合两者的优点
 
-基本的配置
+toml config 基本的配置
 ```
 [jackcfg]
 filename="test.log"
@@ -22,7 +22,7 @@ logmod=3
 servername="test"
 ```
 
-使用
+how to use it 使用
 
 ```
 	l := &Logger{}
