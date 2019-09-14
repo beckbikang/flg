@@ -4,6 +4,7 @@ mvn*
 mvnw
 */mvn*
 .mvn*
+*.log
 .mvnw*
 !.mvn/wrapper/maven-wrapper.jar
 om.xml.tag
