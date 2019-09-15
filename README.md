@@ -28,28 +28,51 @@ how to use it with toml config  使用
 
 2 import the lib,and then you can use it like this
 
+
+common code 
+
+一个典型的用法。你啥也不用关心，只用关心写啥日志就行。日志文件滚动啥的都交给日志文件。
+
+你也可以定义多个日志类型的记录。
+
 ```
 package main
 
-import "github.com/beckbikang/flg"
+import (
+	"github.com/beckbikang/flg"
+	"go.uber.org/zap"
+)
 
-func main() {
+//you can define you log var outer
+var (
+	lt *zap.Logger
+	gflg *flg.Logger
+)
 
-	l := &flg.Logger{}
+func init(){
+	gflg = &flg.Logger{}
 
-	err := l.LoadFromFile("test.toml")
+	err := gflg.LoadFromFile("test.toml")
 	if err != nil{
 		panic("get file faild")
 	}
-	ltest,err := l.GetLogByKey("test")
+
+	lt,err = gflg.GetLogByKey("test")
 	if err != nil {
 		panic(err)
 	}
-	defer ltest.Sync()
+	lt.Info("start running")
+}
 
-	ltest.Info("a test")
+func main() {
+
+	// in my case you do not need define this
+	//defer lt.Sync()
+
+	lt.Info("a test")
 
 }
+
 ```
 
 
