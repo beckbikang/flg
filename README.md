@@ -22,18 +22,34 @@ logmod=3
 servername="test"
 ```
 
-how to use it 使用
+how to use it with toml config  使用
+
+1 create toml config file
+
+2 import the lib,and then you can use it like this
 
 ```
-	l := &Logger{}
+package main
+
+import "github.com/beckbikang/flg"
+
+func main() {
+
+	l := &flg.Logger{}
+
 	err := l.LoadFromFile("test.toml")
 	if err != nil{
 		panic("get file faild")
 	}
 	ltest,err := l.GetLogByKey("test")
+	if err != nil {
+		panic(err)
+	}
+	defer ltest.Sync()
+
 	ltest.Info("a test")
 
-	ltest.Info("abc",zap.Int("int",11))
+}
 ```
 
 
