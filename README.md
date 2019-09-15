@@ -1,5 +1,5 @@
 # flg
-a simple log lib build use zap and lumberjack
+a simple log lib wapper use zap and lumberjack
 
 对zlog和lumberjack进行封装。希望能够结合两者的优点
 
