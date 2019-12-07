@@ -35,6 +35,9 @@ common code
 
 你也可以定义多个日志类型的记录。
 
+也支持LoadFromObject的方式创建日志对象
+
+
 ```
 package main
 
