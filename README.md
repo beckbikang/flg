@@ -38,7 +38,8 @@ common code
 也支持LoadFromObject的方式创建日志对象
 
 
-```
+```golang
+
 package main
 
 import (
@@ -76,6 +77,38 @@ func main() {
 
 }
 
+```
+
+测试例子
+
+```golang
+
+func TestLoadFromFile(t *testing.T){
+	l := &Logger{}
+	err := l.LoadFromFile("test.toml")
+	if err != nil {
+		panic("get file faild")
+	}
+	lg,err := l.GetLogByKey("test")
+	lg.Info("a test")
+
+	lg.Info("abc",zap.Int("int",11))
+}
+
+func TestLoadFromObject(t *testing.T){
+	var fconfig FConfig
+	l := &Logger{}
+	if _, err := toml.DecodeFile("test.toml", &fconfig); err != nil {
+		panic(err)
+	}
+	err := l.LoadFromObject(&fconfig)
+	if err != nil {
+		panic("TestLoadFromObject faild")
+	}
+	lg,err := l.GetLogByKey("test")
+	lg.Info("a test")
+	lg.Info("abc",zap.Int("int",11))
+}
 ```
 
 
