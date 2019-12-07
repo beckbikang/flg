@@ -42,6 +42,22 @@ func (l*Logger)GetLogByKey(key string) (*zap.Logger,error){
 	return zlog,nil
 }
 
+func (l *Logger)LoadFromObject(fconfig *FConfig)error{
+	l.once.Do(
+		func(){
+			l.fconfig = fconfig
+			l.zlogs = make(map[string]*zap.Logger)
+			err := l.makeLogger()
+			if err != nil{
+				panic("make logger faild")
+			}
+	})
+	if l.fconfig == nil || len(l.zlogs) == 0{
+		return errors.New("log config not exist or make log faild")
+	}
+	return nil
+}
+
 /**
 从文件加载日志配置
  */
