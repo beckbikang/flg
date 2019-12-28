@@ -1,4 +1,4 @@
-module flg
+module github.com/beckbikang/flg
 
 go 1.12
 
