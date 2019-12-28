@@ -30,7 +30,7 @@ type Logger struct{
 格式化封装
  */
 func currentTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	t = t.UTC()
+	t = t.Local()
 	enc.AppendString(t.Format("2006-01-02 15-04-05.000"))
 }
 
