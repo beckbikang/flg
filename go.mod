@@ -1,4 +1,4 @@
-module WEIBO/COMMON/flg
+module flg
 
 go 1.12
 
