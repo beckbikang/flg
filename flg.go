@@ -1,5 +1,6 @@
 package flg
 
+
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -181,6 +182,7 @@ func (l*Logger) makeEncoderConfig(zconfig *ZConfig)zapcore.EncoderConfig{
 		EncodeName:     zapcore.FullNameEncoder,
 	}
 }
+
 
 
 func (l*Logger) makeLumberjackLog()lumberjack.Logger{
