@@ -1,10 +1,10 @@
 ### Maven ###
+skylark
 target/
 mvn*
 mvnw
 */mvn*
 .mvn*
-*.log
 .mvnw*
 !.mvn/wrapper/maven-wrapper.jar
 om.xml.tag
@@ -16,6 +16,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 logs/
+vendor/
 
 ### STS ###
 .apt_generated
@@ -46,3 +47,7 @@ nbdist/
 .rebel*
 rebel.xml
 
+core/INFO/
+*.log
+
+##vendor/
