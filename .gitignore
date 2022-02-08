@@ -24,8 +24,6 @@ local.properties
 .loadpath
 .recommenders
 .env
-api/src/logs
-api/src/sfapilog
 .vscode
 
 #vim
@@ -90,4 +88,3 @@ fabric.properties
 # Code Recommenders
 .recommenders/
 
-account.data 
