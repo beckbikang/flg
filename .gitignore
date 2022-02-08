@@ -90,8 +90,4 @@ fabric.properties
 # Code Recommenders
 .recommenders/
 
-# test Controller
-api/src/application/modules/V1/controllers/Test.php
-api/src/application/modules/V2/controllers/Test.php
-
 account.data 
