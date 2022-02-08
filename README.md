@@ -1,7 +1,7 @@
 # flg
 a simple log lib wapper use zap and lumberjack
 
-对zlog和lumberjack进行封装。希望能够结合两者的优点
+
 
 toml config 基本的配置
 ```
@@ -31,11 +31,7 @@ how to use it with toml config  使用
 
 common code 
 
-一个典型的用法。你啥也不用关心，只用关心写啥日志就行。日志文件滚动啥的都交给日志文件。
 
-你也可以定义多个日志类型的记录。
-
-也支持LoadFromObject的方式创建日志对象
 
 
 ```golang
@@ -62,6 +58,7 @@ func init(){
 	}
 
 	lt,err = gflg.GetLogByKey("test")
+	defer lt.Sync()
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +76,7 @@ func main() {
 
 ```
 
-测试例子
+
 
 ```golang
 
@@ -90,8 +87,8 @@ func TestLoadFromFile(t *testing.T){
 		panic("get file faild")
 	}
 	lg,err := l.GetLogByKey("test")
+	lg.Sync()
 	lg.Info("a test")
-
 	lg.Info("abc",zap.Int("int",11))
 }
 
@@ -106,6 +103,7 @@ func TestLoadFromObject(t *testing.T){
 		panic("TestLoadFromObject faild")
 	}
 	lg,err := l.GetLogByKey("test")
+	lg.Sync()
 	lg.Info("a test")
 	lg.Info("abc",zap.Int("int",11))
 }

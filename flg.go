@@ -1,76 +1,69 @@
 package flg
 
-
 import (
+	"errors"
+	"os"
+	"sync"
+	"time"
+
+	"github.com/BurntSushi/toml"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"sync"
-	"os"
-	"errors"
-	"github.com/BurntSushi/toml"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"time"
 )
-
 
 const (
 	TIMEFORMAT = "2006-01-02 15-04-05.000"
 )
 
-//定义基本的日志
-type Logger struct{
-	zlogs map[string]*zap.Logger
-	once sync.Once
+//base struct
+type Logger struct {
+	zlogs   map[string]*zap.Logger
+	once    sync.Once
 	fconfig *FConfig
 }
 
-
-
-/**
-格式化封装
- */
+//format
 func currentTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	t = t.Local()
-	enc.AppendString(t.Format("2006-01-02 15-04-05.000"))
+	enc.AppendString(t.Format(TIMEFORMAT))
 }
 
-func (l*Logger)GetLogByKey(key string) (*zap.Logger,error){
-
-	zlog,ok := l.zlogs[key]
-	if !ok{
+//get data
+func (l *Logger) GetLogByKey(key string) (*zap.Logger, error) {
+	zlog, ok := l.zlogs[key]
+	if !ok {
 		return nil, errors.New("logger is not exist")
 	}
-
-	return zlog,nil
+	return zlog, nil
 }
 
-func (l *Logger)LoadFromObject(fconfig *FConfig)error{
+//get logger from object
+func (l *Logger) LoadFromObject(fconfig *FConfig) error {
 	l.once.Do(
-		func(){
+		func() {
 			l.fconfig = fconfig
 			l.zlogs = make(map[string]*zap.Logger)
 			err := l.makeLogger()
-			if err != nil{
+			if err != nil {
 				panic("make logger faild")
 			}
-	})
-	if l.fconfig == nil || len(l.zlogs) == 0{
+		})
+	if l.fconfig == nil || len(l.zlogs) == 0 {
 		return errors.New("log config not exist or make log faild")
 	}
 	return nil
 }
 
-/**
-从文件加载日志配置
- */
-func (l*Logger)LoadFromFile(filename string)error{
-	//判断文件是否存在
+//get log from toml file
+func (l *Logger) LoadFromFile(filename string) error {
+	//check file
 	_, e := os.Stat(filename)
 	if e != nil {
 		return errors.New("file not exist")
 	}
 	l.once.Do(
-		func(){
+		func() {
 			var fconfig FConfig
 			if _, err := toml.DecodeFile(filename, &fconfig); err != nil {
 				panic(err)
@@ -78,54 +71,49 @@ func (l*Logger)LoadFromFile(filename string)error{
 			l.fconfig = &fconfig
 			l.zlogs = make(map[string]*zap.Logger)
 			err := l.makeLogger()
-			if err != nil{
+			if err != nil {
 				panic("make logger faild")
 			}
 		})
 
-	if l.fconfig == nil || len(l.zlogs) == 0{
+	if l.fconfig == nil || len(l.zlogs) == 0 {
 		return errors.New("log config not exist or make log faild")
 	}
 	return nil
 }
 
+//set default config
 func setDefaultConfig(zconfig *ZConfig) {
-	if len(zconfig.Timekey) == 0{
+	if len(zconfig.Timekey) == 0 {
 		zconfig.Timekey = TIME_KEY
 	}
 
-	if len(zconfig.LevelKey) == 0{
+	if len(zconfig.LevelKey) == 0 {
 		zconfig.LevelKey = LEVEL_KEY
 	}
 
-	if len(zconfig.NameKey) == 0{
+	if len(zconfig.NameKey) == 0 {
 		zconfig.NameKey = NAME_KEY
 	}
-	if len(zconfig.CallerKey) == 0{
+	if len(zconfig.CallerKey) == 0 {
 		zconfig.CallerKey = CALLER_KEY
 	}
-	if len(zconfig.MessageKey) == 0{
+	if len(zconfig.MessageKey) == 0 {
 		zconfig.MessageKey = MESSAGE_KEY
 	}
-	if len(zconfig.StacktraceKey) == 0{
+	if len(zconfig.StacktraceKey) == 0 {
 		zconfig.StacktraceKey = STACK_TRACE_KEY
 	}
 
-
-
 }
 
-/**
-
-通过配置构日志对象
-
- */
-func (l*Logger)makeLogger()error {
+//build logger
+func (l *Logger) makeLogger() error {
 	zfgs := l.fconfig.Zfgs
 
+	lj := l.makeLumberjackLog()
 	//创建可用的日志对象
-	for _,zfg := range zfgs {
-		lj := l.makeLumberjackLog()
+	for _, zfg := range zfgs {
 		setDefaultConfig(&zfg)
 		encoderConfig := l.makeEncoderConfig(&zfg)
 
@@ -133,11 +121,11 @@ func (l*Logger)makeLogger()error {
 		atomicLevel := zap.NewAtomicLevel()
 		atomicLevel.UnmarshalText([]byte(zfg.Level))
 
-		zws := make([]zapcore.WriteSyncer,0)
+		zws := make([]zapcore.WriteSyncer, 0)
 
 		zws = append(zws, zapcore.AddSync(&lj))
 
-		if 1 == (zfg.LogMod & STDOUT_MODE){
+		if 1 == (zfg.LogMod & STDOUT_MODE) {
 			zws = append(zws, zapcore.AddSync(os.Stdout))
 		}
 
@@ -147,14 +135,14 @@ func (l*Logger)makeLogger()error {
 			atomicLevel,
 		)
 
-		zapOptions := make([]zap.Option,0)
+		zapOptions := make([]zap.Option, 0)
 
-		// 开启开发模式，堆栈跟踪
+		//get aller
 		caller := zap.AddCaller()
 		zapOptions = append(zapOptions, caller)
 
-		if(zfg.IsDev){
-			// 开启文件及行号
+		if zfg.IsDev {
+			//add file and line
 			development := zap.Development()
 			zapOptions = append(zapOptions, development)
 		}
@@ -167,7 +155,8 @@ func (l*Logger)makeLogger()error {
 	return nil
 }
 
-func (l*Logger) makeEncoderConfig(zconfig *ZConfig)zapcore.EncoderConfig{
+//make zconfig
+func (l *Logger) makeEncoderConfig(zconfig *ZConfig) zapcore.EncoderConfig {
 	return zapcore.EncoderConfig{
 		TimeKey:        zconfig.Timekey,
 		LevelKey:       zconfig.LevelKey,
@@ -177,32 +166,22 @@ func (l*Logger) makeEncoderConfig(zconfig *ZConfig)zapcore.EncoderConfig{
 		StacktraceKey:  zconfig.StacktraceKey,
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.LowercaseLevelEncoder,  // 小写编码器
-		EncodeTime:     currentTimeEncoder,     // ISO8601 UTC 时间格式
+		EncodeTime:     currentTimeEncoder,             // ISO8601 UTC 时间格式
 		EncodeDuration: zapcore.SecondsDurationEncoder, //
 		EncodeCaller:   zapcore.FullCallerEncoder,      // 全路径编码器
 		EncodeName:     zapcore.FullNameEncoder,
 	}
 }
 
-
-
-func (l*Logger) makeLumberjackLog()lumberjack.Logger{
+//get lumber jacklog
+func (l *Logger) makeLumberjackLog() lumberjack.Logger {
 	lkcfg := l.fconfig.Lfg
-
 	lj := lumberjack.Logger{
-		Filename:  lkcfg.Filename, // 日志文件路径
-		MaxSize:    lkcfg.MaxSize,                      // 每个日志文件保存的最大尺寸 单位：M
-		MaxBackups: lkcfg.MaxBackups,                       // 日志文件最多保存多少个备份
-		MaxAge:     lkcfg.MaxAge,                        // 文件最多保存多少天
-		Compress:   lkcfg.Compress,
+		Filename:   lkcfg.Filename,   // 日志文件路径
+		MaxSize:    lkcfg.MaxSize,    // 每个日志文件保存的最大尺寸 单位：M
+		MaxBackups: lkcfg.MaxBackups, // 日志文件最多保存多少个备份
+		MaxAge:     lkcfg.MaxAge,     // 文件最多保存多少天
+		Compress:   lkcfg.Compress,   //压缩
 	}
 	return lj
 }
-
-
-
-
-
-
-
-

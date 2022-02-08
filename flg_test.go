@@ -17,13 +17,15 @@ var (
 func TestLoadFromFile(t *testing.T) {
 	l := &Logger{}
 	err := l.LoadFromFile("./data/test.toml")
+
 	if err != nil {
 		panic("get file faild")
 	}
 	lg, err := l.GetLogByKey("test")
+	defer lg.Sync()
 	lg.Info("a test")
-
 	lg.Info("abc", zap.Int("int", 11))
+
 }
 
 func TestLoadFromObject(t *testing.T) {
@@ -37,6 +39,7 @@ func TestLoadFromObject(t *testing.T) {
 		panic("TestLoadFromObject faild")
 	}
 	lg, err := l.GetLogByKey("test")
+	defer lg.Sync()
 	lg.Info("a test")
 	lg.Info("abc", zap.Int("int", 11))
 }
