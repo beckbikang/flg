@@ -1,53 +1,97 @@
-### Maven ###
-skylark
-target/
-mvn*
-mvnw
-*/mvn*
-.mvn*
-.mvnw*
-!.mvn/wrapper/maven-wrapper.jar
-om.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-logs/
-vendor/
+#General
+test.log
+/local
+/vendor
+/composer.lock
+/composer.local.*
+/composer.phar
+/coverage.clover
+.DS_Store
+Thumbs.db
+/.idea
+/builds
+arcanist/.phutil_module_cache
+composer.phar
+/node_modules
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.env
+api/src/logs
+api/src/sfapilog
+.vscode
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
+#vim
+*.swp
+*.swo
+
+#File-based project format:
+*.iws
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+*.iml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Eclipse Core
 .project
-.settings
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
 .springBeans
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# Code Recommenders
+.recommenders/
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+# test Controller
+api/src/application/modules/V1/controllers/Test.php
+api/src/application/modules/V2/controllers/Test.php
 
-### Mac ###
-.DS_Store
-
-### .rebex.xml ###
-.rebel*
-rebel.xml
-
-core/INFO/
-*.log
-
-##vendor/
+account.data 
