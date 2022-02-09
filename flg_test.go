@@ -43,3 +43,19 @@ func TestLoadFromObject(t *testing.T) {
 	lg.Info("a test")
 	lg.Info("abc", zap.Int("int", 11))
 }
+
+func Benchmark_Write(b *testing.B) {
+	var fconfig FConfig
+	l := &Logger{}
+	if _, err := toml.DecodeFile("./data/test.toml", &fconfig); err != nil {
+		panic(err)
+	}
+	err := l.LoadFromObject(&fconfig)
+	if err != nil {
+		panic("TestLoadFromObject faild")
+	}
+	benchLog, err := l.GetLogByKey("test")
+	for i := 1; i < b.N; i = i + 1 {
+		benchLog.Info("abc", zap.Int("int", 11))
+	}
+}

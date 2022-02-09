@@ -109,4 +109,14 @@ func TestLoadFromObject(t *testing.T){
 }
 ```
 
+压力测试。每次日志操作3.486微秒
+```shell
+goos: darwin
+goarch: arm64
+pkg: flg
+Benchmark_Write-8   	  334576	      3486 ns/op
+PASS
+ok  	flg	1.840s
+```
+
 
