@@ -3,7 +3,7 @@ a simple log lib wapper use zap and lumberjack
 
 
 
-toml config 基本的配置
+toml config 
 ```
 [jackcfg]
 filename="test.log"
@@ -22,7 +22,7 @@ logmod=3
 servername="test"
 ```
 
-how to use it with toml config  使用
+how to use it with toml config  
 
 1 create toml config file
 
@@ -109,7 +109,8 @@ func TestLoadFromObject(t *testing.T){
 }
 ```
 
-压力测试。每次日志操作3.486微秒
+benchmark test
+
 ```shell
 goos: darwin
 goarch: arm64
